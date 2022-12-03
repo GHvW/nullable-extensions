@@ -6,22 +6,28 @@ using System.Threading.Tasks;
 
 namespace NullableExtensions;
 
-public static class NullableOps {
 
-    public static bool IsNull<A>(this A? it) => it == null;
+public static class NullableRefOps {
 
-    public static bool IsNotNull<A>(this A? it) => it != null;
+    public static bool IsNull<A>(
+        this A? it
+    ) where A : class => 
+        it == null;
 
-    public static A OrElseThrow<A>(this A? it, Exception exception) {
+    public static bool IsNotNull<A>(
+        this A? it
+    ) where A : class => 
+        it != null;
+
+    public static A OrElseThrow<A>(this A? it, Exception exception)
+        where A : class {
+
         if (it != null) {
             return it;
         }
 
         throw exception;
     }
-}
-
-public static class NullableRefOps {
 
     public static B? Select<A, B>(this A? x, Func<A, B> fn)
       where A : class
@@ -62,6 +68,26 @@ public static class NullableRefOps {
 }
 
 public static class NullableValueOps {
+
+    public static bool IsNull<A>(
+        this A? it
+    ) where A : struct => 
+        it.HasValue;
+
+    public static bool IsNotNull<A>(
+        this A? it
+    ) where A : struct => 
+        !it.HasValue;
+
+    public static A OrElseThrow<A>(this A? it, Exception exception)
+        where A : struct {
+
+        if (it.HasValue) {
+            return it.Value;
+        }
+
+        throw exception;
+    }
 
     public static B? Select<A, B>(this A? x, Func<A, B> fn)
         where A : struct
