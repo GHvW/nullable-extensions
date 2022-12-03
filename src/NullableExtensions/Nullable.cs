@@ -11,6 +11,14 @@ public static class NullableOps {
     public static bool IsNull<A>(this A? it) => it == null;
 
     public static bool IsNotNull<A>(this A? it) => it != null;
+
+    public static A OrElseThrow<A>(this A? it, Exception exception) {
+        if (it != null) {
+            return it;
+        }
+
+        throw exception;
+    }
 }
 
 public static class NullableRefOps {
